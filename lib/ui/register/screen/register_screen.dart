@@ -1,12 +1,14 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:evently_c15/core/DialogUtils.dart';
+import 'package:evently_c15/core/remote/network/FirestoreManager.dart';
+import 'package:evently_c15/model/User.dart' as MyUser;
 import 'package:evently_c15/ui/home/screen/home_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
-import '../../../ThemeProvider.dart';
+import '../../../core/providers/ThemeProvider.dart';
 import '../../../core/resources/AssetsManager.dart';
 import '../../../core/resources/StringsManager.dart';
 import '../../../core/resources/constants.dart';
@@ -136,6 +138,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     child: CustomButton(title: "register".tr(), onClick: (){
                       if(formKey.currentState!.validate()){
                         // create new account
+                        createAccount();
                       }
                     }),
                   ),
@@ -190,4 +193,33 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
+  createAccount()async{
+    try{
+      DialogUtils.showLoadingDialog(context);
+      var credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: emailController.text.trim(),
+          password: passwordController.text
+      );
+      await FirestoreManager.createUser(MyUser.User(
+        id: credential.user?.uid,
+        name: nameController.text,
+        email: emailController.text,
+        favorites: []
+      ));
+      Navigator.pop(context);
+      Navigator.pushNamedAndRemoveUntil(context, HomeScreen.routeName, (route) => false);
+    }on FirebaseAuthException catch (e) {
+      Navigator.pop(context);
+      if (e.code == 'weak-password') {
+        DialogUtils.showMessageDialog(context, "passwordWeak".tr());
+      } else if (e.code == 'email-already-in-use') {
+        DialogUtils.showMessageDialog(context, "emailAlreadyExist".tr());
+      }else{
+        DialogUtils.showMessageDialog(context, e.toString());
+      }
+    }catch(e){
+      print(e.toString());
+      DialogUtils.showMessageDialog(context, e.toString());
+    }
+  }
 }

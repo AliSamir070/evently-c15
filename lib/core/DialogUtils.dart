@@ -1,5 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:evently_c15/core/resources/ColorManager.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class DialogUtils{
   static showLoadingDialog(BuildContext context){
@@ -23,5 +25,16 @@ class DialogUtils{
         }, child: Text("ok".tr()))
       ],
     ),);
+  }
+  static showToast(String message){
+    Fluttertoast.showToast(
+        msg: message,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: ColorManager.blackColor,
+        textColor: Colors.white,
+        fontSize: 16.0
+    );
   }
 }

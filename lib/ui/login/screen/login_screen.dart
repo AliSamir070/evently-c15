@@ -14,7 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
-import '../../../ThemeProvider.dart';
+import '../../../core/providers/ThemeProvider.dart';
 import '../../../core/reusable_components/CustomSwitch.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -114,6 +114,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   Container(
                     width: double.infinity,
                     child: CustomButton(title: "login".tr(), onClick: (){
+                      signIn();
                     }),
                   ),
                   SizedBox(height: 24,),
@@ -167,4 +168,27 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
+  void signIn() async{
+    if(formKey.currentState!.validate()){
+      try{
+        DialogUtils.showLoadingDialog(context);
+        var credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+            email: emailController.text.trim(),
+            password: passwordController.text
+        );
+        Navigator.pop(context);
+        Navigator.pushReplacementNamed(context,HomeScreen.routeName);
+      }on FirebaseAuthException catch (e) {
+        Navigator.pop(context);
+        print(e.code);
+        if (e.code == 'user-not-found') {
+          DialogUtils.showMessageDialog(context, "userNotFound".tr());
+        } else if (e.code == 'wrong-password') {
+          DialogUtils.showMessageDialog(context, "wrongPass".tr());
+        }else{
+          DialogUtils.showMessageDialog(context, e.toString());
+        }
+      }
+    }
+  }
 }

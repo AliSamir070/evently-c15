@@ -67,6 +67,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
               Container(
                 width: double.infinity  ,
                 child: CustomButton(title: "restPass".tr(), onClick: (){
+                    resetPassword();
                 }),
               )
             ],
@@ -76,4 +77,21 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
     );
   }
 
+  resetPassword()async{
+    if(formKey.currentState!.validate()){
+      try{
+        DialogUtils.showLoadingDialog(context);
+        await FirebaseAuth.instance
+            .sendPasswordResetEmail(email: emailController.text.trim());
+        Navigator.pop(context);
+      }on FirebaseAuthException catch (e) {
+        Navigator.pop(context);
+        print(e.code);
+        if (e.code == 'user-not-found') {
+          DialogUtils.showMessageDialog(context, "userNotFound".tr());
+        }
+      }
+    }
+
+  }
 }

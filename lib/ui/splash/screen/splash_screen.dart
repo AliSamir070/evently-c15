@@ -17,8 +17,11 @@ class SplashScreen extends StatelessWidget {
       body: Center(child: Image.asset(AssetsManager.logo))
           .animate(
         onComplete: (controller) {
+          if(FirebaseAuth.instance.currentUser==null){
+            Navigator.pushReplacementNamed(context, LoginScreen.routeName);
+          }else{
             Navigator.pushReplacementNamed(context, HomeScreen.routeName);
-
+          }
         },
       )
           .fade(duration: Duration(seconds: 2))

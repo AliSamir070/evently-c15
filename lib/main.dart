@@ -1,9 +1,11 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:evently_c15/ThemeProvider.dart';
+import 'package:evently_c15/core/providers/ThemeProvider.dart';
+import 'package:evently_c15/core/providers/UserProvider.dart';
 import 'package:evently_c15/core/remote/local/PrefsManager.dart';
 import 'package:evently_c15/core/resources/AppStyle.dart';
 import 'package:evently_c15/core/resources/ColorManager.dart';
 import 'package:evently_c15/core/resources/constants.dart';
+import 'package:evently_c15/ui/create_event/screen/CreateEventScreen.dart';
 import 'package:evently_c15/ui/forget_password/screen/forget_password_screen.dart';
 import 'package:evently_c15/ui/home/screen/home_screen.dart';
 import 'package:evently_c15/ui/login/screen/login_screen.dart';
@@ -24,16 +26,20 @@ void main() async{
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(ChangeNotifierProvider(
-      create: (context) => ThemeProvider()..initTheme(),
-      child: EasyLocalization(
-          path: "assets/translations",
-          supportedLocales: [
-            Locale("en"),
-            Locale("ar"),
-          ],
-          fallbackLocale: Locale("en"),
-          child: const MyApp())));
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(create: (context) => ThemeProvider()..initTheme(),),
+      ChangeNotifierProvider(create: (context) => UserProvider(),),
+    ],
+    child: EasyLocalization(
+        path: "assets/translations",
+        supportedLocales: [
+          Locale("en"),
+          Locale("ar"),
+        ],
+        fallbackLocale: Locale("en"),
+        child: const MyApp()),
+  ));
 }
 // .
 // ..
@@ -61,7 +67,8 @@ class MyApp extends StatelessWidget {
         LoginScreen.routeName:(_)=>LoginScreen(),
         ForgetPasswordScreen.routeName:(_)=>ForgetPasswordScreen(),
         RegisterScreen.routeName:(_)=>RegisterScreen(),
-        HomeScreen.routeName:(_)=>HomeScreen()
+        HomeScreen.routeName:(_)=>HomeScreen(),
+        CreateEventScreen.routeName:(_)=>CreateEventScreen()
       },
       );
   }

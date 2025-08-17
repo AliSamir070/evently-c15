@@ -1,6 +1,6 @@
 import 'package:animated_toggle_switch/animated_toggle_switch.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:evently_c15/ThemeProvider.dart';
+import 'package:evently_c15/core/providers/ThemeProvider.dart';
 import 'package:evently_c15/core/resources/AssetsManager.dart';
 import 'package:evently_c15/core/resources/ColorManager.dart';
 import 'package:evently_c15/core/reusable_components/CustomSwitch.dart';

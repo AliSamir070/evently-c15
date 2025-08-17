@@ -22,5 +22,11 @@
   "ok": "Ok",
   "passwordWeak": "The password provided is too weak.",
   "userNotFound": "No user found for that email.",
-  "wrongPass": "Wrong password provided for that user."
+  "wrongPass": "Wrong password provided for that user.",
+  "home": "Home",
+  "map": "Map",
+  "love": "Love",
+  "profile": "Profile",
+  "logout": "Logout",
+  "welcome": "Welcome Back ✨"
 }
