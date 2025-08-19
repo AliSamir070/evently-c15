@@ -13,7 +13,7 @@ import 'package:provider/provider.dart';
 class EventItem extends StatefulWidget {
   Event event;
   bool isLoveTab;
-  EventItem(this.event,{this.isLoveTab = false});
+  EventItem(this.event,{this.isLoveTab = false,super.key});
 
   @override
   State<EventItem> createState() => _EventItemState();

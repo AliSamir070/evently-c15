@@ -65,7 +65,11 @@ class _LoveTabState extends State<LoveTab> {
                   );
                 }
                 return ListView.separated(
-                    itemBuilder: (context, index) => EventItem(events[index],isLoveTab: true,),
+                    itemBuilder: (context, index) => EventItem(
+                      events[index],
+                      isLoveTab: true,
+                      key: ValueKey(events[index].id),
+                    ),
                     separatorBuilder: (context, index) => SizedBox(height: 16,),
                     itemCount: events.length);
               },
